@@ -8,6 +8,28 @@ const routes = [
     component: Home
   },
   {
+    path: '/pessoa',
+    name: 'Pessoa',
+    component: () => import('../views/Pessoas.vue')
+  },
+  {
+    path: '/pessoa/novo',
+    name: 'PessoaNovo',
+    component: () => import('../views/FormPessoa.vue')
+  }, 
+  {
+    path: '/pessoa/:id',
+    name: 'PessoaForm',
+    component: () => import('../views/FormPessoa.vue'),
+    children: [
+      {
+        path: '/endereco',
+        component: () => import('../views/FormPessoaEndereco.vue'),
+      }
+    ]
+  },   
+
+  {
     path: '/about',
     name: 'About',
     // route level code-splitting
