@@ -1,6 +1,7 @@
 <template>
   <div> 
       <h1>Marcas</h1>
+      <button @click="novo">Nova marca</button>
       <table>
           <th>
               <td>Id</td>
@@ -10,7 +11,10 @@
           <tr v-for="m in marcas" :key="m.id">
               <td>{{m.id}}</td>
               <td>{{m.nome}}</td>
-              <td><a href="#" @click="editar(m)">Editar</a></td>
+              <td>
+                  <a href="#" @click="editar(m)">Editar</a> | 
+                  <a href="#" @click="deletar(m)">Deletar</a>
+               </td>
           </tr>
       </table>
   </div>
@@ -25,14 +29,33 @@ export default {
         }
     },
     mounted() {
-        axios.get('https://carros-app-example.herokuapp.com/marca').then(response => {
-            this.marcas = response.data    
-        })
-
+        this.load()
     },
     methods: {
+        load() {
+            axios.get('https://carros-app-example.herokuapp.com/marca').then(response => {
+                this.marcas = response.data    
+            })
+        },
+        novo() {
+            this.$router.push('/marca/novo')
+        },
         editar(marca) {
             this.$router.push(`/marca/${marca.id}`)
+        },
+        deletar(marca) {
+            if (confirm("Deseja apagar o registro?")) {
+                axios.delete(`https://carros-app-example.herokuapp.com/marca/${marca.id}`)
+                    .then(() => {
+                        this.load()
+                        alert("Registro apagado")
+
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        alert(error)
+                    })
+            }
         }
     }
 
